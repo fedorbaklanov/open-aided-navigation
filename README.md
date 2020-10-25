@@ -1,7 +1,7 @@
 # Introduction
 
-This is a repository of the Open Aided Navigation project started by Fedor Baklanov. The project aims to demonstrate
-and explain state of the art methods of modern aided navigation and multi-sensor localization.
+This is a repository of the Open Aided Navigation project started by [Fedor Baklanov](https://navigation-expert.com/about_us). 
+The project aims to demonstrate and explain state of the art methods of modern aided navigation and multi-sensor localization.
 The software provided in this repository is written in Matlab for the sake of simplicity. Nevertheless, principal
 architecture of the sensor fusion software tries to ensure simple transferability to industrial software projects.
 
