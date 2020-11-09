@@ -20,3 +20,23 @@ Path to the demo: *demo\gnssLsq\script_runGnssAlgo_nex.m*
 
 1. Open the file *demo\gnssLsq\script_runGnssAlgo_nex.m* is Matlab
 2. Run the script, it should work in one click!
+
+## Automotive loosely-coupled INS/GNSS sensor fusion
+
+This example demonstrates how to do fusion of an Inertial Navigation System (INS) and GNSS position information
+in an automotive application. The script uses .csv logs of accelerometer, gyroscope, and GNSS measurements
+collected by the app [Nav Sensor Recorder](https://navigation-expert.com/software). 
+
+Path to the demo: *demo\insGnssLoose\run_insGnssLoose.m*
+
+*An explanation of the algorithm and mathematical backgrounds will be added soon.*
+
+**Disclaimer**
+
+*The provided software aims to demonstrate published state-of-the-art sensor fusion techniques. The provided sensor
+fusion algorithm does not present a ready-to-use solution for any kind of application.*
+
+**How to start**
+
+1. Open the file *demo\insGnssLoose\run_insGnssLoose.m* in Matlab
+2. Run the script, it should work in one click!

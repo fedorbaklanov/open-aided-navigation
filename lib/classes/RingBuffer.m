@@ -1,8 +1,9 @@
-classdef RingBuffer    
+classdef RingBuffer
     properties % (Access = private)
         buffer;
         ttags;
         size;
+        capacity;
         indLast;
     end
 
@@ -11,6 +12,7 @@ classdef RingBuffer
             obj.buffer = repmat(bufObj,1,len);
             obj.ttags = uint64(zeros(1,len));
             obj.size = 0;
+            obj.capacity = len;
             obj.indLast = 0;
         end
 
@@ -21,7 +23,7 @@ classdef RingBuffer
 
         function size = getSize(obj)
             size = obj.size;
-        end        
+        end
 
         function nextInd = getNextInd(obj)
             if obj.indLast == length(obj.buffer)
@@ -46,7 +48,7 @@ classdef RingBuffer
             obj.buffer(nextInd) = bufObj;
             obj.ttags(nextInd) = ttag;
             obj.indLast = nextInd;
-            
+
             if obj.size < length(obj.buffer)
                 obj.size = obj.size + 1;
             end
@@ -64,11 +66,27 @@ classdef RingBuffer
             indLast = obj.indLast;       
         end
 
-        function bufObj = getLastData(obj)
+        function [bufObj,status] = getLastData(obj)
             if obj.indLast > 0
                 bufObj = obj.buffer(obj.indLast);
+                status = true;
             else
                 bufObj = [];
+                status = false;
+            end
+        end
+        
+        function indFirst = getFirstInd(obj)
+            if obj.size > 0 && obj.size < obj.capacity
+                indFirst = 1;
+            elseif obj.size == 0
+                indFirst = 0;
+            elseif obj.size == obj.capacity && obj.indLast < obj.capacity
+                indFirst = obj.indLast + 1;
+            elseif obj.size == obj.capacity && obj.indLast == obj.capacity
+                indFirst = 1;
+            else
+                indFirst = 0;
             end
         end
 
@@ -77,6 +95,16 @@ classdef RingBuffer
                 indOut = length(obj.buffer);
             elseif indIn > 1
                 indOut = indIn - 1;
+            else
+                indOut = 0;
+            end
+        end
+
+        function indOut = incIndex(obj,indIn)
+            if indIn > 0 && indIn < obj.size
+                indOut = indIn + 1;
+            elseif indIn == obj.size && obj.size == length(obj.buffer)
+                indOut = 1;
             else
                 indOut = 0;
             end
@@ -98,6 +126,30 @@ classdef RingBuffer
                     tmpInd = decIndex(obj,tmpInd);
                     i = i - 1;
                 end
+            end
+        end
+        function ind = getClosestInd(obj,ttag)
+            if obj.size == 0
+                ind = 0;
+            else
+                [ind1,status] = obj.getLastIndLe(ttag);
+                if ~status
+                    % All ttags in the buffer are greater than ttag
+                    ind = obj.getFirstInd();
+                else
+                    if ind1 == obj.indLast
+                        ind = ind1;
+                    else
+                        ind2 = obj.incIndex(ind1);
+                        dTtag1 = lib_ttagDiffUint64(ttag,obj.ttags(ind1));
+                        dTtag2 = lib_ttagDiffUint64(ttag,obj.ttags(ind2));
+                        if abs(dTtag1) < abs(dTtag2)
+                            ind = ind1;
+                        else
+                            ind = ind2;
+                        end
+                    end
+                end 
             end
         end
     end

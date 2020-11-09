@@ -14,7 +14,7 @@ classdef NavFilter
         [obj] = setMode(obj,filterMode);
         [obj,res] = checkMeas(obj,measDb);
         [obj,res] = initState(obj,measDb);
-        [obj,res] = initCov(obj);
+        [obj,res] = initCov(obj,measDb);
         [obj,res] = propState(obj,measDb);
         [obj,res] = propCov(obj,measDb);
         [obj,res] = measUpdate(obj,measDb);
@@ -28,6 +28,10 @@ classdef NavFilter
 
         function P_out = getCov(obj)
             P_out = obj.P;
+        end
+
+        function P_diag = getVar(obj)
+             P_diag = obj.P(sub2ind(size(obj.P),1:size(obj.P,1),1:size(obj.P,2)));
         end
 
         function mode_out = getMode(obj)
