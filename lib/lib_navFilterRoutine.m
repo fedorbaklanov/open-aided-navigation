@@ -12,7 +12,7 @@ function [navFilter,measDb] = lib_navFilterRoutine(navFilter,measDb,ttag)
                 end
 
                 if filOk
-                    [navFilter,filOk] = navFilter.initCov();
+                    [navFilter,filOk] = navFilter.initCov(measDb);
                 end
 
                 if filOk
@@ -41,6 +41,8 @@ function [navFilter,measDb] = lib_navFilterRoutine(navFilter,measDb,ttag)
             otherwise
                 % do nothing
         end
+    else
+        navFilter = navFilter.reset();
     end
 end
 

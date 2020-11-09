@@ -5,6 +5,7 @@ classdef SensorType
         GYRO = 2;
         CAMERA = 3;
         GNSS_RAW = 4;
+        GNSS = 5;
     end
 end
 
