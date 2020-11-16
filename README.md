@@ -27,9 +27,9 @@ This example demonstrates how to do fusion of an Inertial Navigation System (INS
 in an automotive application. The script uses .csv logs of accelerometer, gyroscope, and GNSS measurements
 collected by the app [Nav Sensor Recorder](https://navigation-expert.com/software). 
 
-Path to the demo: *demo\insGnssLoose\run_insGnssLoose.m*
+**Path to the demo**: *demo\insGnssLoose\run_insGnssLoose.m*
 
-*An explanation of the algorithm and mathematical backgrounds will be added soon.*
+**Algorithm description**: *demo\insGnssLoose\Documentation_InsGnssFilterLoose.pdf*
 
 **Disclaimer**
 
