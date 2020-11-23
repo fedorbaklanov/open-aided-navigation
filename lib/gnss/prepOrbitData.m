@@ -16,7 +16,7 @@ function [orbitDB] = prepOrbitData(gnssMeasDB)
                             % we enter this condition at the second iteration
                             t_st = t_st - orbitDB.svOrbitData(slotNum).dt_sv;
                         end
-                        orbitDB.svOrbitData(slotNum) = deriveGpsSatOrbit(gpsBcDB(slotNum), t_st);
+                        orbitDB.svOrbitData(slotNum) = deriveGpsSatPosVel(gpsBcDB(slotNum), t_st);
                     end
                 otherwise
                     % do nothing

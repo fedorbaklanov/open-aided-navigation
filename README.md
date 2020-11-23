@@ -7,6 +7,16 @@ architecture of the sensor fusion software tries to ensure simple transferabilit
 
 # Available examples
 
+## Overview
+
+The following examples/demonstrations are currently available:
+
+1. GPS least-squares based position and velocity estimation
+2. GPS Kalman filter based position, velocity, and time (PVT) estimation
+3. Automotive loosely-coupled INS/GNSS sensor fusion
+
+See below for details.
+
 ## GPS least-squares positioning
 
 This examples shows how to derive user's position from raw measurements of a GNSS receiver. The script supports
@@ -14,11 +24,27 @@ This examples shows how to derive user's position from raw measurements of a GNS
 out more more about [Navigation Sensor Data Exchange format](https://navigation-expert.com/nex_format#ul-id-header-sitename)
  under this [link](https://navigation-expert.com/nex_format#ul-id-header-sitename).
 
-Path to the demo: *demo\gnssLsq\script_runGnssAlgo_nex.m*
+**Path to the demo**: *demo\gnssLsq\script_runGnssAlgo_nex.m*
 
 **How to start**
 
 1. Open the file *demo\gnssLsq\script_runGnssAlgo_nex.m* is Matlab
+2. Run the script, it should work in one click!
+
+## GPS Kalman filter based position, velocity, and time (PVT) estimation
+
+The demonstration shows how to use a Kalman filter for position, velocity, and time estimation. The Kalman filter based
+approach has several advantages compared the single-epoch least-squares method: smoother result, ability to provide navigation
+information during short outages of GNSS signal reception. The script supports
+.nex input files collected by the app [Nav Sensor Recorder](https://navigation-expert.com/software). You can find
+out more more about [Navigation Sensor Data Exchange format](https://navigation-expert.com/nex_format#ul-id-header-sitename)
+ under this [link](https://navigation-expert.com/nex_format#ul-id-header-sitename).
+ 
+**Path to the demo**: *demo\gnssPvt\run_gnssPvtFilter_nex.m*
+
+**How to start**
+
+1. Open the file *demo\gnssPvt\run_gnssPvtFilter_nex.m* is Matlab
 2. Run the script, it should work in one click!
 
 ## Automotive loosely-coupled INS/GNSS sensor fusion

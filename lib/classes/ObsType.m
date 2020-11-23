@@ -13,6 +13,7 @@ classdef ObsType
         VEL_C_X = uint8(10)
         VEL_C_Y = uint8(11)
         VEL_C_Z = uint8(12)
+        DR = uint8(13)
     end
 end
 

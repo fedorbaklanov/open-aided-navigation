@@ -1,7 +1,7 @@
-function handleNexMsg(nexMsg)
+function measDb = handleNexMsg(nexMsg,measDb)
     switch nexMsg.msgGroup
         case hex2dec('2')
-            handleNexGnssGrp(nexMsg);
+            measDb = handleNexGnssGrp(nexMsg,measDb);
         otherwise
             % do nothing
     end
