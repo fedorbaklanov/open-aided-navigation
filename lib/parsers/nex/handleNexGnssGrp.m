@@ -1,11 +1,10 @@
-function handleNexGnssGrp(nexGnssMsg)
-    global gnssMeasDb;
+function measDb = handleNexGnssGrp(nexGnssMsg,measDb)
     global isNewEpoch;
 
     switch nexGnssMsg.msgType
         case hex2dec('0')
             gnssMeas = parseNexGnssRaw(nexGnssMsg);
-            gnssMeasDb = gnssMeasDb.addData(gnssMeas, SensorType.GNSS_RAW);
+            measDb = measDb.addData(gnssMeas, SensorType.GNSS_RAW);
             isNewEpoch = true;
         case hex2dec('1')
             navMsg = parseNexGnssNav(nexGnssMsg);

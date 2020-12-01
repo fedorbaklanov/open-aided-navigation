@@ -9,6 +9,10 @@ function [auxSatData] = calcAuxSatData(orbitData,prevState)
     auxSatData.los_e(2) = (orbitData.POS_y - prevState.POS_y) / auxSatData.estRange;
     auxSatData.los_e(3) = (orbitData.POS_z - prevState.POS_z) / auxSatData.estRange;
 
+    auxSatData.estRangeRate = auxSatData.los_e' * ([orbitData.v_x - prevState.v_x;...
+                                                    orbitData.v_y - prevState.v_y;...
+                                                    orbitData.v_z - prevState.v_z]);
+
     [lat, lon, ~] = lib_ecefToLlh([prevState.POS_x; prevState.POS_y; prevState.POS_z], Wgs84);
     C_ne = lib_dcmEcefToNed(lat, lon);
     los_NWU = diag([1; -1; -1]) * C_ne * auxSatData.los_e;

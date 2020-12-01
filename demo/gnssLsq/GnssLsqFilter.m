@@ -7,15 +7,13 @@ classdef GnssLsqFilter < NavFilter
         orbitDb; % auxiliary orbit data
     end
 
-    properties (Access='private')
-        stateLen;
-        errorStateLen;
+    properties (Access='private',Constant)
+        stateLen = 8;
+        errorStateLen = 8;
     end
 
     methods
         function [obj] = GnssLsqFilter()
-            obj.stateLen = 4;
-            obj.errorStateLen = 4;
             obj.navState = NavState;
             obj = reset(obj);
         end
@@ -54,7 +52,7 @@ classdef GnssLsqFilter < NavFilter
             res = true;
         end
 
-        function [obj,res] = initCov(obj)
+        function [obj,res] = initCov(obj,measDb)
             res = true;
         end
 
@@ -97,6 +95,10 @@ classdef GnssLsqFilter < NavFilter
                 tmpState.POS_y = obj.x(2) + obj.dx(2);
                 tmpState.POS_z = obj.x(3) + obj.dx(3);
                 tmpState.CB = obj.x(4) + obj.dx(4);
+                tmpState.v_x = obj.x(5) + obj.dx(5);
+                tmpState.v_y = obj.x(6) + obj.dx(6);
+                tmpState.v_z = obj.x(7) + obj.dx(7);
+                tmpState.CD = obj.x(8) + obj.dx(8);
                 tmpState.valid = true;
 
                 for i=1:1:ConfGnssEng.MAX_SV_NUM
@@ -115,24 +117,32 @@ classdef GnssLsqFilter < NavFilter
 
                 % prepare variables for least-squares method
                 resVec = zeros(obsDB.obsCount,1);
-                H = zeros(obsDB.obsCount,4);
-                nextSat = 1;
+                H = zeros(obsDB.obsCount,8);
+                nextObs = 1;
 
                 % fill in H matrix and residual (innovation) vector
                 for i=1:1:obsDB.obsCount
                     if obsDB.obs(i).type == ObsType.PR && obsDB.obs(i).gnssId == GnssId.GPS
                         slotNum = getBroadcastDBslotNum(obsDB.obs(i).gnssId, obsDB.obs(i).svId);
-                        resVec(nextSat) = obsDB.obs(i).val - auxSatDataDB(slotNum).estRange;
-                        H(nextSat,1) = - auxSatDataDB(slotNum).los_e(1);
-                        H(nextSat,2) = - auxSatDataDB(slotNum).los_e(2);
-                        H(nextSat,3) = - auxSatDataDB(slotNum).los_e(3);
-                        H(nextSat,4) = 1;
-                        nextSat = nextSat + 1;
+                        resVec(nextObs) = obsDB.obs(i).val - auxSatDataDB(slotNum).estRange;
+                        H(nextObs,1) = - auxSatDataDB(slotNum).los_e(1);
+                        H(nextObs,2) = - auxSatDataDB(slotNum).los_e(2);
+                        H(nextObs,3) = - auxSatDataDB(slotNum).los_e(3);
+                        H(nextObs,4) = 1;
+                        nextObs = nextObs + 1;
+                    elseif obsDB.obs(i).type == ObsType.DO && obsDB.obs(i).gnssId == GnssId.GPS
+                        slotNum = getBroadcastDBslotNum(obsDB.obs(i).gnssId, obsDB.obs(i).svId);
+                        resVec(nextObs) = obsDB.obs(i).val - auxSatDataDB(slotNum).estRangeRate;
+                        H(nextObs,5) = - auxSatDataDB(slotNum).los_e(1);
+                        H(nextObs,6) = - auxSatDataDB(slotNum).los_e(2);
+                        H(nextObs,7) = - auxSatDataDB(slotNum).los_e(3);
+                        H(nextObs,8) = 1;
+                        nextObs = nextObs + 1;
                     end
                 end
 
                 % solve least-squares problem using Kalman filter
-                obj.P = diag([1e12; 1e12; 1e12; 1e12]);
+                obj.P = diag(repmat(1e12, 1, obj.errorStateLen));
                 ddx = zeros(obj.errorStateLen,1);
 
                 for i=1:1:obsDB.obsCount
@@ -159,6 +169,10 @@ classdef GnssLsqFilter < NavFilter
             obj.navState.POS_y = obj.x(2);
             obj.navState.POS_z = obj.x(3);
             obj.navState.CB = obj.x(4);
+            obj.navState.v_x = obj.x(5);
+            obj.navState.v_y = obj.x(6);
+            obj.navState.v_z = obj.x(7);
+            obj.navState.CD = obj.x(8);
             obj.navState.valid = true;
             res = true;
         end

@@ -1,6 +1,7 @@
 function [stateVec] = getApproxState(navState,measDB,orbitDB)
     if navState.valid
-        stateVec = [navState.POS_x; navState.POS_y; navState.POS_z; navState.CB];
+        stateVec = [navState.POS_x; navState.POS_y; navState.POS_z; navState.CB;...
+            navState.v_x; navState.v_y; navState.v_z; navState.CD];
     else
         % derive approximate position
         prevState = NavState;
@@ -27,7 +28,8 @@ function [stateVec] = getApproxState(navState,measDB,orbitDB)
             normPosE = sqrt(prevState.POS_x^2 + prevState.POS_y^2 + prevState.POS_z^2);
 
             R = 6356000;
-            stateVec = R / normPosE * [prevState.POS_x; prevState.POS_y; prevState.POS_z; 0];
+            stateVec = R / normPosE * [prevState.POS_x; prevState.POS_y; prevState.POS_z; 0;...
+                0; 0; 0; 0];
         end
     end
 end
