@@ -32,6 +32,8 @@ integration method and step size.
 
 **Required Matlab toolboxes**: Curve Fitting toolbox.
 
+**Explanation of the algorithm**: *demo\imuSimulation\Documentation_IMU_Simulation.pdf*
+
 **How to start**
 
 1. Open the file *demo\imuSimulation\sim_imuAndRef.m* in Matlab
