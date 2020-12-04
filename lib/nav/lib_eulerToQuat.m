@@ -1,4 +1,14 @@
 function [q] = lib_eulerToQuat(phi, theta, psi)
+    %lib_eulerToQuat Convert Euler angles in aerospace sequence to
+    %orientation quaternion that defines a transformation from sensor frame
+    %to ECEF coordinate system.
+    %
+    %   Input parameters:
+    %
+    %      phi -- roll, [rad]
+    %      theta -- pitch, [rad]
+    %      psi -- heading, [rad]
+
     q = zeros(4,1);
     cos05phi   = cos(0.5 * phi);
     sin05phi   = sin(0.5 * phi);
